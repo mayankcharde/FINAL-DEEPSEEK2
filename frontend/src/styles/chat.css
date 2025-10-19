@@ -1,0 +1,47 @@
+/* Chat container styles */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* Main spacing between chat messages */
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Question box styles */
+.question-container {
+  background-color: #f5f7fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px; /* Additional bottom margin for question boxes */
+}
+
+/* Response box styles */
+.response-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 12px; /* Additional top margin for response boxes */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Message groups - can be used to group a question and its response */
+.message-group {
+  margin-bottom: 32px; /* Extra spacing between different Q&A pairs */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chat-container {
+    gap: 16px;
+  }
+
+  .question-container,
+  .response-container {
+    padding: 12px;
+  }
+
+  .message-group {
+    margin-bottom: 24px;
+  }
+}

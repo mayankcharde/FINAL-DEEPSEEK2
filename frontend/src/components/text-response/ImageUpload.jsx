@@ -41,7 +41,7 @@ const ImageUpload = () => {
   const handleUpload = async () => {
     if (!imageBase64) return alert('Select an image first');
     try {
-      const res = await axios.post('http://localhost:5000/api/image/upload', { imageBase64 });
+      const res = await axios.post('https://final-deepseek2.onrender.com/api/image/upload', { imageBase64 });
       alert('Image stored in DB successfully!');
     } catch (err) {
       console.error(err);

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // Add a utility function that can be imported by other components
 export async function generateGeminiResponse(prompt) {
   try {
-    const response = await fetch("http://localhost:5000/api/generate", {
+    const response = await fetch("https://final-deepseek2.onrender.com/api/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

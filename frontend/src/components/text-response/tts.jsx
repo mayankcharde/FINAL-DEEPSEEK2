@@ -12,6 +12,7 @@ const TTS = ({ text }) => {
     { code: 'fr-FR', name: 'French' },
     { code: 'de-DE', name: 'German' },
     { code: 'hi-IN', name: 'Hindi' },
+    { code: 'ma-IN', name: 'Marathi' },
     { code: 'zh-CN', name: 'Chinese' }
   ];
 

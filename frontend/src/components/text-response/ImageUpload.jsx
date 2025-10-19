@@ -67,7 +67,7 @@ const ImageUpload = () => {
     
     try {
       console.log('Sending analysis request...');
-      const res = await axios.post('http://localhost:5000/api/image/analyze', {
+      const res = await axios.post('https://final-deepseek2.onrender.com/api/image/analyze', {
         imageUrl: imageBase64,
         userQuestion,
       });

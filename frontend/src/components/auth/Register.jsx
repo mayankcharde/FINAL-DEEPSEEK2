@@ -665,9 +665,7 @@ const Register = () => {
 
       if (response.data.user) {
         login(response.data.user);
-        setTimeout(() => {
-          navigate("/home", { replace: true });
-        }, 0);
+        navigate("/home", { replace: true });
       }
     } catch (err) {
       setError(err.response?.data?.message || "Failed to register");

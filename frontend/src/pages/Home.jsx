@@ -6,11 +6,11 @@ import MobileMenu from "../components/MobileMenu";
 
 function Home() {
   return (
-    <div className="relative flex h-screen w-screen overflow-hidden bg-black">
-      <div className="hidden md:block">
+    <div className="relative flex h-[100dvh] w-screen overflow-hidden bg-black">
+      <div className="hidden md:block flex-shrink-0">
         <Sidebar />
       </div>
-      <div className="flex-1 flex flex-col h-full">
+      <div className="flex-1 flex flex-col h-full min-w-0">
         <ChatArea />
       </div>
       <div className="md:hidden">

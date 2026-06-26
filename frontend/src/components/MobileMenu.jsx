@@ -332,8 +332,8 @@
 //       {/* Sidebar with modernized styling */}
 //       <aside
 //         className={`
-//           fixed md:relative w-[85%] sm:w-72 lg:w-80 bg-black h-full flex flex-col 
-//           border-r border-zinc-800/80 overflow-y-auto overflow-x-hidden transition-all duration-400 ease-in-out 
+//           fixed md:relative w-[85%] sm:w-72 lg:w-80 bg-black h-full flex flex-col
+//           border-r border-zinc-800/80 overflow-y-auto overflow-x-hidden transition-all duration-400 ease-in-out
 //           z-40 shadow-2xl md:shadow-none backdrop-blur-xl scrollbar-thin scrollbar-thumb-blue-800/40 scrollbar-track-transparent
 //           ${
 //             isMobileOpen
@@ -647,7 +647,7 @@
 //             </div>
 
 //             {/* User dropdown menu */}
-//             {userDropdownOpen && (
+//             {/* {userDropdownOpen && (
 //               <div className="absolute top-[70px] right-4 w-48 bg-zinc-800 rounded-xl shadow-lg shadow-blue-900/20 border border-zinc-700/50 animate-in fade-in duration-200 z-50">
 //                 <div className="py-1 flex flex-col">
 //                   <button
@@ -659,8 +659,13 @@
 //                   </button>
 //                 </div>
 //               </div>
-//             )}
+//             )} */}
 //           </div>
+//         </div>
+
+//         {/* Developer Credit */}
+//         <div className="text-center text-white text-[12px] mb-7 px-3.5 italic">
+//           Designed & Developed by Mayank Shirish Charde
 //         </div>
 //       </aside>
 
@@ -677,12 +682,6 @@
 
 // export default Sidebar;
 
-
-
-
-
-
-// src/components/Sidebar.jsx
 import {
   Plus,
   User,
@@ -852,7 +851,7 @@ const Sidebar = () => {
       // Separate chats by type
       const textChats = response.data.filter((chat) => chat.type === "text");
       const imageChats = response.data.filter(
-        (chat) => chat.type === "image-analysis"
+        (chat) => chat.type === "image-analysis",
       );
 
       setChatHistory(textChats);
@@ -922,7 +921,7 @@ const Sidebar = () => {
   const handleDeleteProfile = async () => {
     if (
       window.confirm(
-        "Are you sure you want to delete your profile? This action cannot be undone."
+        "Are you sure you want to delete your profile? This action cannot be undone.",
       )
     ) {
       setUserDropdownOpen(false);
@@ -1035,35 +1034,26 @@ const Sidebar = () => {
             <X className="h-4 w-4 text-zinc-200" />
           </button>
         </div>
-
         {/* Top Section with Logo/Brand - Enhanced with animation */}
         <div className="p-5 sm:p-6 pb-4">
           <div className="flex items-center gap-3 group">
-            {/* <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-indigo-700 rounded-lg flex items-center justify-center shadow-lg shadow-blue-800/20 group-hover:shadow-blue-700/30 group-hover:scale-105 transition-all duration-300">
-              <Layout className="h-5 w-5 text-white animate-pulse" />
-            </div> */}
             <img
               src="/deepseekfinal.jpg"
               alt="DeepSeek Logo"
               className="h-25 transition-all duration-300 group-hover:scale-105"
             />
           </div>
+          <br /> {/* Line break after logo section */}
         </div>
-
         {/* Search Component - Modernized */}
         <div className="px-4 sm:px-5 pt-1 pb-4">
           <div className="relative group">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-              {/* <Search className="h-3.5 w-3.5 text-zinc-500 group-focus-within:text-blue-400 transition-colors duration-300" /> */}
+              {/* Search icon placeholder */}
             </div>
-            {/* <input
-              type="text"
-              placeholder="Search conversations..."
-              className="w-full pl-10 pr-4 py-2.5 bg-zinc-800/40 border border-zinc-700/50 rounded-xl text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-blue-500/70 focus:border-blue-500/70 transition-all duration-300 backdrop-blur-sm hover:bg-zinc-800/60"
-            /> */}
           </div>
+          <br /> {/* Line break after search section */}
         </div>
-
         {/* Library Section - With increased font size */}
         <div className="px-4 sm:px-5 pt-1 pb-4">
           <div className="flex items-center gap-2 mb-3 px-2">
@@ -1071,6 +1061,7 @@ const Sidebar = () => {
               Library
             </h2>
           </div>
+          <br />
           <div className="space-y-2 bg-zinc-800/30 rounded-3xl p-3 border border-zinc-700/20">
             {["Templates", "Saved Responses"].map((item, index) => {
               const icons = [
@@ -1078,16 +1069,18 @@ const Sidebar = () => {
                 <Bookmark key={2} />,
                 <Star key={3} />,
               ];
-
+              <br />;
               const handleLibraryClick = (index) => {
                 setActiveButton(index);
                 setIsMobileOpen(false);
                 if (index === 0) {
                   // Templates
                   navigate("/templates");
+                  <br />;
                 } else if (index === 1) {
                   // Saved Responses
                   navigate("/saved-responses");
+                  <br />;
                 } else if (index === 2) {
                   // Favorites
                   navigate("/favorites");
@@ -1119,14 +1112,14 @@ const Sidebar = () => {
               );
             })}
           </div>
+          <br /> {/* Line break after Library section */}
         </div>
-
         {/* Divider line - Enhanced gradient with more margin */}
         <div className="h-px bg-gradient-to-r from-transparent via-blue-700/30 to-transparent mx-4 my-3"></div>
-
+        <br /> {/* Line break after divider */}
         {/* Gray divider line between Library and History */}
         <div className="h-[3px] bg-blue-600 mx-4 my-2"></div>
-
+        <br /> {/* Line break after gray divider */}
         {/* History Section - With increased font size */}
         <div className="px-4 sm:px-5 pt-3 pb-3">
           <div className="flex items-center justify-between mb-2.5 px-2">
@@ -1141,11 +1134,11 @@ const Sidebar = () => {
               className="text-zinc-500 hover:text-blue-400 p-1.5 rounded-full hover:bg-blue-900/20 transition-all duration-300 hover:shadow-sm hover:shadow-blue-500/20"
               title="Refresh History"
             >
-              {/* <Settings className="h-3.5 w-3.5" strokeWidth={2} /> */}
+              {/* Settings icon placeholder */}
             </button>
           </div>
+          <br /> {/* Line break after History header */}
         </div>
-
         {/* Chat History - With more rounded corners */}
         <div className="px-4 sm:px-5 mb-3">
           <div className="border border-zinc-800/60 rounded-3xl bg-zinc-800/30 shadow-inner backdrop-blur-sm h-[35vh] relative overflow-hidden">
@@ -1192,8 +1185,8 @@ const Sidebar = () => {
               )}
             </div>
           </div>
+          <br /> {/* Line break after Chat History component */}
         </div>
-
         {/* Image Generation History */}
         <div className="px-4 sm:px-5 mb-3">
           <div className="border border-zinc-800/60 rounded-3xl bg-zinc-800/30 shadow-inner backdrop-blur-sm h-[25vh] relative overflow-hidden">
@@ -1211,12 +1204,12 @@ const Sidebar = () => {
               <ImageGenerationHistory />
             </div>
           </div>
+          <br /> {/* Line break after Image Generation History component */}
         </div>
-
         {/* Navigation Menu */}
         <div className="px-4 sm:px-5 mb-3">
           <h3 className="text-xs sm:text-sm font-semibold text-blue-400 uppercase tracking-wider mb-2 px-2 flex items-center gap-2">
-            {/* <Menu className="h-3.5 w-3.5" />  */}
+            {/* Menu icon placeholder */}
           </h3>
           <div className="border border-zinc-800/60 rounded-3xl bg-zinc-800/30 shadow-inner backdrop-blur-sm max-h-[30vh] relative overflow-hidden">
             {/* Subtle background decoration */}
@@ -1227,8 +1220,6 @@ const Sidebar = () => {
 
             <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-blue-700/50 scrollbar-thumb-rounded-full scrollbar-track-transparent px-3 py-3 relative z-10">
               <div className="space-y-2">
-                {/* Removed duplicate New Chat Button */}
-
                 {/* Edit Profile Button */}
                 <button
                   onClick={handleEditProfile}
@@ -1237,7 +1228,7 @@ const Sidebar = () => {
                   <User className="h-4 w-4 text-zinc-400" />
                   <span className="font-medium text-sm">Edit Profile</span>
                 </button>
-
+                <br /> {/* Line break after Edit Profile button */}
                 {/* Help Button */}
                 <button
                   onClick={handleHelp}
@@ -1246,7 +1237,7 @@ const Sidebar = () => {
                   <HelpCircle className="h-4 w-4 text-zinc-400" />
                   <span className="font-medium text-sm">Help</span>
                 </button>
-
+                <br /> {/* Line break after Help button */}
                 {/* Upgrade to Pro Button */}
                 <button
                   onClick={handleUpgradeClick}
@@ -1265,11 +1256,11 @@ const Sidebar = () => {
               </div>
             </div>
           </div>
+          <br /> {/* Line break after Navigation Menu section */}
         </div>
-
         {/* Flexible spacer - smaller now */}
         <div className="flex-grow"></div>
-
+        <br /> {/* Line break after spacer */}
         {/* New Chat Button - Keep this one */}
         <div className="px-4 sm:px-5 pb-6 sm:pb-7">
           <button
@@ -1285,8 +1276,8 @@ const Sidebar = () => {
             </div>
             <span className="font-medium text-sm tracking-wide">New Chat</span>
           </button>
+          <br /> {/* Line break after New Chat button */}
         </div>
-
         {/* User Profile - Compact version */}
         <div className="border-t border-zinc-800/60 mt-3 mb-5">
           <div className="flex items-center justify-between px-6 py-4 mx-2 mt-2 rounded-3xl bg-zinc-800/40 border border-zinc-700/30 shadow-inner">
@@ -1318,7 +1309,7 @@ const Sidebar = () => {
                 onClick={toggleUserDropdown}
                 title="User menu"
               >
-                {/* <Settings className="h-4 w-4" strokeWidth={2} /> */}
+                {/* Settings icon placeholder */}
               </button>
 
               <button
@@ -1329,24 +1320,9 @@ const Sidebar = () => {
                 <LogOut className="h-4 w-4" strokeWidth={2} />
               </button>
             </div>
-
-            {/* User dropdown menu */}
-            {/* {userDropdownOpen && (
-              <div className="absolute top-[70px] right-4 w-48 bg-zinc-800 rounded-xl shadow-lg shadow-blue-900/20 border border-zinc-700/50 animate-in fade-in duration-200 z-50">
-                <div className="py-1 flex flex-col">
-                  <button
-                    onClick={handleDeleteProfile}
-                    className="flex items-center gap-2 px-4 py-2.5 text-red-400 hover:bg-red-500/10 hover:text-red-300 text-sm"
-                  >
-                    <User className="h-4 w-4 text-red-400" />
-                    Delete Profile
-                  </button>
-                </div>
-              </div>
-            )} */}
           </div>
+          <br /> {/* Line break after User Profile section */}
         </div>
-
         {/* Developer Credit */}
         <div className="text-center text-white text-[12px] mb-7 px-3.5 italic">
           Designed & Developed by Mayank Shirish Charde

@@ -164,20 +164,20 @@ const ChatArea = () => {
         </div>
       )}
 
-      {/* Chat Messages Area - Improved bottom spacing and mobile responsiveness */}
+      {/* Chat Messages Area */}
       <div
-        className="flex-1 relative z-10 overflow-y-auto pb-28 sm:pb-36"
-        style={{ maxHeight: "calc(100vh - 100px)" }} // Adjusted for mobile
+        className="flex-1 relative z-10 overflow-y-auto"
+        style={{ paddingBottom: '80px' }}
       >
         {conversations.length === 0 ? (
           <div className="flex items-center justify-center min-h-full p-3 sm:p-6 md:p-8">
             <div className="text-center space-y-4 sm:space-y-8 w-full max-w-4xl mx-auto">
               {!selectedTemplate && (
-                <div className="flex justify-center transform scale-75 sm:scale-100">
+                <div className="flex justify-center">
                   <img
                     src="/deepseeklogo.png"
                     alt="Chat Logo"
-                    className="h-16 sm:h-20 md:h-24"
+                    className="h-14 sm:h-20 md:h-24"
                   />
                 </div>
               )}
@@ -187,8 +187,8 @@ const ChatArea = () => {
             </div>
           </div>
         ) : (
-          <div className="w-full py-4 sm:py-8">
-            <div className="max-w-5xl mx-auto">
+          <div className="w-full py-3 sm:py-8">
+            <div className="max-w-5xl mx-auto px-2 sm:px-4">
               {conversations.map((conv) =>
                 conv.type === "user" ? (
                   <UserMessage key={conv.id} message={conv.message} />
@@ -231,13 +231,11 @@ const ChatArea = () => {
         )}
       </div>
 
-      {/* Chat Input - Better positioned for mobile */}
-      <div className="fixed bottom-2 sm:bottom-6 left-0 right-0 z-30 bg-transparent">
-        <div className="container mx-auto px-1 sm:px-3">
-          <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
-          <div className="text-center mt-1 text-[10px] sm:text-xs text-gray-400/70">
-            DeepSeek can make mistakes. Verify important information.
-          </div>
+      {/* Chat Input - Fixed at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 z-30 bg-black/80 backdrop-blur-sm border-t border-zinc-800/50 px-2 sm:px-4 py-2 sm:py-3">
+        <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
+        <div className="text-center mt-1 text-[10px] sm:text-xs text-gray-400/70">
+          DeepSeek can make mistakes. Verify important information.
         </div>
       </div>
     </main>

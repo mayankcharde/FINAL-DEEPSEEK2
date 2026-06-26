@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { User, Mail, Camera, Save, ArrowLeft } from 'lucide-react';
-import axios from '../utils/axios';
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { User, Mail, Camera, Save, ArrowLeft } from "lucide-react";
+import axios from "../utils/axios";
 
 const ProfileEdit = () => {
   const { user, login } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    profilePhoto: ''
+    name: "",
+    email: "",
+    profilePhoto: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     if (user) {
       setFormData({
-        name: user.name || '',
-        email: user.email || '',
-        profilePhoto: user.profilePhoto || ''
+        name: user.name || "",
+        email: user.email || "",
+        profilePhoto: user.profilePhoto || "",
       });
     }
   }, [user]);
@@ -29,20 +29,20 @@ const ProfileEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     try {
-      const response = await axios.put('/api/auth/profile', formData);
+      const response = await axios.put("/api/auth/profile", formData);
       if (response.data.user) {
         login(response.data.user);
-        setSuccess('Profile updated successfully!');
+        setSuccess("Profile updated successfully!");
         setTimeout(() => {
-          navigate('/home');
+          navigate("/home");
         }, 2000);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to update profile');
+      setError(err.response?.data?.message || "Failed to update profile");
     } finally {
       setLoading(false);
     }
@@ -51,15 +51,15 @@ const ProfileEdit = () => {
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
       const img = new Image();
-      
+
       img.onload = () => {
         const maxWidth = 300;
         const maxHeight = 300;
         let { width, height } = img;
-        
+
         if (width > height) {
           if (width > maxWidth) {
             height = (height * maxWidth) / width;
@@ -71,14 +71,14 @@ const ProfileEdit = () => {
             height = maxHeight;
           }
         }
-        
+
         canvas.width = width;
         canvas.height = height;
         ctx.drawImage(img, 0, 0, width, height);
-        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.7);
         setFormData({ ...formData, profilePhoto: compressedDataUrl });
       };
-      
+
       img.src = URL.createObjectURL(file);
     }
   };
@@ -91,12 +91,12 @@ const ProfileEdit = () => {
         <div className="absolute bottom-20 right-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse animation-delay-2000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-purple-500/5 to-blue-500/5 rounded-full blur-3xl"></div>
       </div>
-
+      <br /> {/* Line break after background section */}
       <div className="relative z-10 w-full max-w-lg">
         {/* Header */}
         <div className="text-center mb-12">
           <button
-            onClick={() => navigate('/home')}
+            onClick={() => navigate("/home")}
             className="inline-flex items-center gap-2 text-zinc-400 hover:text-purple-400 transition-all duration-300 mb-8 group"
           >
             <div className="p-2 rounded-full bg-zinc-800/50 group-hover:bg-purple-500/20 transition-all duration-300">
@@ -104,20 +104,24 @@ const ProfileEdit = () => {
             </div>
             <span className="font-medium">Back to Home</span>
           </button>
-          
+          <br /> {/* Line break after Back button */}
           <div className="relative">
             <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 mb-4 tracking-tight">
               Profile Settings
             </h1>
             <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full opacity-60"></div>
           </div>
-          <p className="text-zinc-400 text-lg font-light">Customize your digital identity</p>
+          <br /> {/* Line break after title */}
+          <p className="text-zinc-400 text-lg font-light">
+            Customize your digital identity
+          </p>
+          <br /> {/* Line break after subtitle */}
         </div>
 
         {/* Main Form Container */}
         <div className="relative">
           <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 rounded-3xl blur-xl opacity-20 animate-pulse"></div>
-          
+          <br /> {/* Line break after background glow */}
           <div className="relative bg-zinc-900/60 backdrop-blur-2xl border border-zinc-700/30 rounded-3xl p-10 shadow-2xl">
             {/* Profile Photo Section */}
             <div className="flex flex-col items-center mb-10">
@@ -140,8 +144,8 @@ const ProfileEdit = () => {
                   <Camera className="h-3 w-3 text-white" />
                 </div>
               </div>
+              <br /> {/* Line break after profile photo */}
             </div>
-
             {/* Status Messages */}
             {error && (
               <div className="mb-8 p-4 bg-red-500/10 border border-red-500/30 rounded-2xl text-red-400 text-sm backdrop-blur-sm animate-in fade-in duration-300">
@@ -151,7 +155,7 @@ const ProfileEdit = () => {
                 </div>
               </div>
             )}
-
+            <br /> {/* Line break after error message */}
             {success && (
               <div className="mb-8 p-4 bg-green-500/10 border border-green-500/30 rounded-2xl text-green-400 text-sm backdrop-blur-sm animate-in fade-in duration-300">
                 <div className="flex items-center gap-2">
@@ -160,7 +164,7 @@ const ProfileEdit = () => {
                 </div>
               </div>
             )}
-
+            <br /> {/* Line break after success message */}
             <form onSubmit={handleSubmit} className="space-y-10">
               {/* Name Field */}
               <div className="space-y-4 group">
@@ -175,12 +179,15 @@ const ProfileEdit = () => {
                   <input
                     type="text"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     className="relative w-full px-6 py-5 bg-zinc-800/50 border border-zinc-600/40 rounded-2xl text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-purple-500/60 transition-all duration-500 text-lg font-medium backdrop-blur-sm hover:bg-zinc-800/60 focus:bg-zinc-800/70 focus:scale-[1.02] transform"
                     placeholder="Enter your display name"
                     required
                   />
                 </div>
+                <br /> {/* Line break after name input */}
               </div>
 
               {/* Email Field */}
@@ -196,12 +203,15 @@ const ProfileEdit = () => {
                   <input
                     type="email"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
                     className="relative w-full px-6 py-5 bg-zinc-800/50 border border-zinc-600/40 rounded-2xl text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-blue-500/60 transition-all duration-500 text-lg font-medium backdrop-blur-sm hover:bg-zinc-800/60 focus:bg-zinc-800/70 focus:scale-[1.02] transform"
                     placeholder="Enter your email address"
                     required
                   />
                 </div>
+                <br /> {/* Line break after email input */}
               </div>
 
               {/* Photo Upload */}
@@ -221,6 +231,7 @@ const ProfileEdit = () => {
                     className="relative w-full px-6 py-5 bg-zinc-800/50 border border-zinc-600/40 rounded-2xl text-zinc-100 transition-all duration-500 backdrop-blur-sm hover:bg-zinc-800/60 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-gradient-to-r file:from-purple-500 file:to-blue-500 file:text-white hover:file:from-purple-400 hover:file:to-blue-400 file:transition-all file:duration-300 file:shadow-lg hover:file:shadow-xl file:cursor-pointer"
                   />
                 </div>
+                <br /> {/* Line break after photo upload input */}
               </div>
 
               {/* Submit Button */}
@@ -235,7 +246,9 @@ const ProfileEdit = () => {
                     {loading ? (
                       <div className="flex items-center gap-4">
                         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
-                        <span className="animate-pulse">Updating Profile...</span>
+                        <span className="animate-pulse">
+                          Updating Profile...
+                        </span>
                       </div>
                     ) : (
                       <div className="flex items-center gap-4">
@@ -245,6 +258,7 @@ const ProfileEdit = () => {
                     )}
                   </button>
                 </div>
+                <br /> {/* Line break after submit button */}
               </div>
             </form>
           </div>

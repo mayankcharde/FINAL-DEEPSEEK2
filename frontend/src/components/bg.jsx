@@ -1,296 +1,352 @@
-import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
-import { useEffect, useRef } from "react";
+// import { useEffect, useRef } from "react";
+// import { Renderer, Program, Mesh, Triangle } from "ogl";
+
+// const hexToRgb = (hex) => {
+//   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+//   if (!result) return [1, 0.5, 0.2];
+//   return [
+//     parseInt(result[1], 16) / 255,
+//     parseInt(result[2], 16) / 255,
+//     parseInt(result[3], 16) / 255,
+//   ];
+// };
+
+// const vertex = `#version 300 es
+// precision highp float;
+// in vec2 position;
+// in vec2 uv;
+// out vec2 vUv;
+// void main() {
+//   vUv = uv;
+//   gl_Position = vec4(position, 0.0, 1.0);
+// }
+// `;
+
+// const fragment = `#version 300 es
+// precision highp float;
+// uniform vec2 iResolution;
+// uniform float iTime;
+// uniform vec3 uCustomColor;
+// uniform float uUseCustomColor;
+// uniform float uSpeed;
+// uniform float uDirection;
+// uniform float uScale;
+// uniform float uOpacity;
+// uniform vec2 uMouse;
+// uniform float uMouseInteractive;
+// out vec4 fragColor;
+
+// void mainImage(out vec4 o, vec2 C) {
+//   vec2 center = iResolution.xy * 0.5;
+//   C = (C - center) / uScale + center;
+
+//   vec2 mouseOffset = (uMouse - center) * 0.0002;
+//   C += mouseOffset * length(C - center) * step(0.5, uMouseInteractive);
+
+//   float i, d, z, T = iTime * uSpeed * uDirection;
+//   vec3 O, p, S;
+
+//   for (vec2 r = iResolution.xy, Q; ++i < 60.; O += o.w/d*o.xyz) {
+//     p = z*normalize(vec3(C-.5*r,r.y));
+//     p.z -= 4.;
+//     S = p;
+//     d = p.y-T;
+
+//     p.x += .4*(1.+p.y)*sin(d + p.x*0.1)*cos(.34*d + p.x*0.05);
+//     Q = p.xz *= mat2(cos(p.y+vec4(0,11,33,0)-T));
+//     z+= d = abs(sqrt(length(Q*Q)) - .25*(5.+S.y))/3.+8e-4;
+//     o = 1.+sin(S.y+p.z*.5+S.z-length(S-p)+vec4(2,1,0,8));
+//   }
+
+//   o.xyz = tanh(O/1e4);
+// }
+
+// bool finite1(float x){ return !(isnan(x) || isinf(x)); }
+// vec3 sanitize(vec3 c){
+//   return vec3(
+//     finite1(c.r) ? c.r : 0.0,
+//     finite1(c.g) ? c.g : 0.0,
+//     finite1(c.b) ? c.b : 0.0
+//   );
+// }
+
+// void main() {
+//   vec4 o = vec4(0.0);
+//   mainImage(o, gl_FragCoord.xy);
+//   vec3 rgb = sanitize(o.rgb);
+
+//   float intensity = (rgb.r + rgb.g + rgb.b) / 3.0;
+//   vec3 customColor = intensity * uCustomColor;
+//   vec3 finalColor = mix(rgb, customColor, step(0.5, uUseCustomColor));
+
+//   float alpha = length(rgb) * uOpacity;
+//   fragColor = vec4(finalColor, alpha);
+// }`;
+
+// export const Plasma = ({
+//   color = "#ffffff",
+//   speed = 1,
+//   direction = "forward",
+//   scale = 1,
+//   opacity = 1,
+//   mouseInteractive = true,
+// }) => {
+//   const containerRef = useRef(null);
+//   const mousePos = useRef({ x: 0, y: 0 });
+
+//   useEffect(() => {
+//     if (!containerRef.current) return;
+//     const containerEl = containerRef.current;
+
+//     const useCustomColor = color ? 1.0 : 0.0;
+//     const customColorRgb = color ? hexToRgb(color) : [1, 1, 1];
+
+//     const directionMultiplier = direction === "reverse" ? -1.0 : 1.0;
+
+//     let renderer;
+//     try {
+//       renderer = new Renderer({
+//         webgl: 2,
+//         alpha: true,
+//         antialias: false,
+//         dpr: Math.min(window.devicePixelRatio || 1, 2),
+//       });
+//     } catch {
+//       return;
+//     }
+//     const gl = renderer.gl;
+//     if (!gl) return;
+//     const canvas = gl.canvas;
+//     canvas.style.display = "block";
+//     canvas.style.width = "100%";
+//     canvas.style.height = "100%";
+//     containerEl.appendChild(canvas);
+
+//     const geometry = new Triangle(gl);
+
+//     const program = new Program(gl, {
+//       vertex: vertex,
+//       fragment: fragment,
+//       uniforms: {
+//         iTime: { value: 0 },
+//         iResolution: { value: new Float32Array([1, 1]) },
+//         uCustomColor: { value: new Float32Array(customColorRgb) },
+//         uUseCustomColor: { value: useCustomColor },
+//         uSpeed: { value: speed * 0.4 },
+//         uDirection: { value: directionMultiplier },
+//         uScale: { value: scale },
+//         uOpacity: { value: opacity },
+//         uMouse: { value: new Float32Array([0, 0]) },
+//         uMouseInteractive: { value: mouseInteractive ? 1.0 : 0.0 },
+//       },
+//     });
+
+//     const mesh = new Mesh(gl, { geometry, program });
+
+//     const handleMouseMove = (e) => {
+//       if (!mouseInteractive) return;
+//       const rect = containerEl.getBoundingClientRect();
+//       mousePos.current.x = e.clientX - rect.left;
+//       mousePos.current.y = e.clientY - rect.top;
+//       const mouseUniform = program.uniforms.uMouse.value;
+//       mouseUniform[0] = mousePos.current.x;
+//       mouseUniform[1] = mousePos.current.y;
+//     };
+
+//     if (mouseInteractive) {
+//       containerEl.addEventListener("mousemove", handleMouseMove);
+//     }
+
+//     const setSize = () => {
+//       const rect = containerEl.getBoundingClientRect();
+//       const width = Math.max(1, Math.floor(rect.width));
+//       const height = Math.max(1, Math.floor(rect.height));
+//       renderer.setSize(width, height);
+//       const res = program.uniforms.iResolution.value;
+//       res[0] = gl.drawingBufferWidth;
+//       res[1] = gl.drawingBufferHeight;
+//     };
+
+//     const ro = new ResizeObserver(setSize);
+//     ro.observe(containerEl);
+//     setSize();
+
+//     let raf = 0;
+//     let contextLost = false;
+//     let isVisible = true;
+//     const t0 = performance.now();
+
+//     const loop = (t) => {
+//       if (contextLost || !isVisible) return;
+//       let timeValue = (t - t0) * 0.001;
+//       if (direction === "pingpong") {
+//         const pingpongDuration = 10;
+//         const segmentTime = timeValue % pingpongDuration;
+//         const isForward = Math.floor(timeValue / pingpongDuration) % 2 === 0;
+//         const u = segmentTime / pingpongDuration;
+//         const smooth = u * u * (3 - 2 * u);
+//         const pingpongTime = isForward
+//           ? smooth * pingpongDuration
+//           : (1 - smooth) * pingpongDuration;
+//         program.uniforms.uDirection.value = 1.0;
+//         program.uniforms.iTime.value = pingpongTime;
+//       } else {
+//         program.uniforms.iTime.value = timeValue;
+//       }
+//       renderer.render({ scene: mesh });
+//       raf = requestAnimationFrame(loop);
+//     };
+
+//     const handleContextLost = (e) => {
+//       e.preventDefault();
+//       contextLost = true;
+//       cancelAnimationFrame(raf);
+//     };
+//     const handleContextRestored = () => {
+//       contextLost = false;
+//       if (isVisible) {
+//         cancelAnimationFrame(raf);
+//         raf = requestAnimationFrame(loop);
+//       }
+//     };
+//     canvas.addEventListener("webglcontextlost", handleContextLost);
+//     canvas.addEventListener("webglcontextrestored", handleContextRestored);
+
+//     const io = new IntersectionObserver(
+//       ([entry]) => {
+//         const wasVisible = isVisible;
+//         isVisible = entry.isIntersecting;
+//         if (isVisible && !wasVisible && !contextLost) {
+//           cancelAnimationFrame(raf);
+//           raf = requestAnimationFrame(loop);
+//         }
+//       },
+//       { threshold: 0 },
+//     );
+//     io.observe(containerEl);
+
+//     raf = requestAnimationFrame(loop);
+
+//     return () => {
+//       cancelAnimationFrame(raf);
+//       ro.disconnect();
+//       io.disconnect();
+//       canvas.removeEventListener("webglcontextlost", handleContextLost);
+//       canvas.removeEventListener("webglcontextrestored", handleContextRestored);
+//       if (mouseInteractive && containerEl) {
+//         containerEl.removeEventListener("mousemove", handleMouseMove);
+//       }
+//       try {
+//         containerEl?.removeChild(canvas);
+//       } catch {}
+//     };
+//   }, [color, speed, direction, scale, opacity, mouseInteractive]);
+
+//   return (
+//     <div
+//       ref={containerRef}
+//       className="w-full h-full overflow-hidden relative"
+//     />
+//   );
+// };
+
+// export default Plasma;
 import React from "react";
 
-const VERT = `#version 300 es
-in vec2 position;
-void main() {
-  gl_Position = vec4(position, 0.0, 1.0);
-}
-`;
+const GradientBars = ({
+  numBars = 15,
+  gradientFrom = "rgb(59, 15, 255)", // Deep blue
+  gradientTo = "rgba(124, 58, 237, 0.2)", // Purple with transparency
+  animationDuration = 2,
+  className = "",
+}) => {
+  const calculateHeight = (index, total) => {
+    const position = index / (total - 1);
+    const maxHeight = 100;
+    const minHeight = 30;
 
-const FRAG = `#version 300 es
-precision highp float;
+    const center = 0.5;
+    const distanceFromCenter = Math.abs(position - center);
+    const heightPercentage = Math.pow(distanceFromCenter * 2, 1.2);
 
-uniform float uTime;
-uniform float uAmplitude;
-uniform vec3 uColorStops[3];
-uniform vec2 uResolution;
-uniform float uBlend;
+    return minHeight + (maxHeight - minHeight) * heightPercentage;
+  };
 
-out vec4 fragColor;
-
-vec3 permute(vec3 x) {
-  return mod(((x * 34.0) + 1.0) * x, 289.0);
-}
-
-float snoise(vec2 v){
-  const vec4 C = vec4(
-      0.211324865405187, 0.366025403784439,
-      -0.577350269189626, 0.024390243902439
-  );
-  vec2 i  = floor(v + dot(v, C.yy));
-  vec2 x0 = v - i + dot(i, C.xx);
-  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-  vec4 x12 = x0.xyxy + C.xxzz;
-  x12.xy -= i1;
-  i = mod(i, 289.0);
-
-  vec3 p = permute(
-      permute(i.y + vec3(0.0, i1.y, 1.0))
-    + i.x + vec3(0.0, i1.x, 1.0)
-  );
-
-  vec3 m = max(
-      0.5 - vec3(
-          dot(x0, x0),
-          dot(x12.xy, x12.xy),
-          dot(x12.zw, x12.zw)
-      ), 
-      0.0
-  );
-  m = m * m;
-  m = m * m;
-
-  vec3 x = 2.0 * fract(p * C.www) - 1.0;
-  vec3 h = abs(x) - 0.5;
-  vec3 ox = floor(x + 0.5);
-  vec3 a0 = x - ox;
-  m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
-
-  vec3 g;
-  g.x  = a0.x  * x0.x  + h.x  * x0.y;
-  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-  return 130.0 * dot(m, g);
-}
-
-// Enhanced fbm with more sci-fi like patterns
-float fbm(vec2 p) {
-    float sum = 0.0;
-    float amp = 1.0;
-    float freq = 1.0;
-    // More octaves and altered frequency for digital/tech look
-    for(int i = 0; i < 8; i++) {
-        float noise = snoise(p * freq);
-        // Add digital stepping effect to some layers
-        if(i > 3) {
-            noise = floor(noise * 5.0) / 5.0;
+  return (
+    <>
+      <style>{`
+        @keyframes pulseBar {
+          0% { transform: scaleY(var(--initial-scale)); }
+          100% { transform: scaleY(calc(var(--initial-scale) * 0.7)); }
         }
-        sum += amp * noise;
-        amp *= 0.45;
-        freq *= 2.2;
-    }
-    return sum;
-}
+      `}</style>
 
-// New futuristic pattern function - creates tech-like grid patterns
-float gridPattern(vec2 uv, float scale, float intensity) {
-    vec2 grid = fract(uv * scale);
-    float lines = max(
-        smoothstep(0.95, 1.0, grid.x) * intensity,
-        smoothstep(0.95, 1.0, grid.y) * intensity
-    );
-    return lines;
-}
-
-// Energy pulse function for sci-fi effect
-float energyPulse(vec2 uv, vec2 center, float radius, float thickness, float time) {
-    float dist = length(uv - center);
-    float pulse = sin(dist * 8.0 - time * 3.0) * 0.5 + 0.5;
-    return smoothstep(radius - thickness, radius, dist) * 
-           smoothstep(radius + thickness, radius, dist) * pulse;
-}
-
-struct ColorStop {
-  vec3 color;
-  float position;
+      <div className={`absolute inset-0 z-0 overflow-hidden ${className}`}>
+        <div
+          className="flex h-full"
+          style={{
+            width: "100%",
+            transform: "translateZ(0)",
+            backfaceVisibility: "hidden",
+            WebkitFontSmoothing: "antialiased",
+          }}
+        >
+          {Array.from({ length: numBars }).map((_, index) => {
+            const height = calculateHeight(index, numBars);
+            return (
+              <div
+                key={index}
+                style={{
+                  flex: `1 0 calc(100% / ${numBars})`,
+                  maxWidth: `calc(100% / ${numBars})`,
+                  height: "100%",
+                  background: `linear-gradient(to top, ${gradientFrom}, ${gradientTo})`,
+                  transform: `scaleY(${height / 100})`,
+                  transformOrigin: "bottom",
+                  transition: "transform 0.5s ease-in-out",
+                  animation: `pulseBar ${animationDuration}s ease-in-out infinite alternate`,
+                  animationDelay: `${index * 0.1}s`,
+                  outline: "1px solid rgba(0, 0, 0, 0)",
+                  boxSizing: "border-box",
+                  "--initial-scale": height / 100,
+                }}
+              />
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
 };
 
-#define COLOR_RAMP(colors, factor, finalColor) {              \
-  int index = 0;                                            \
-  for (int i = 0; i < 2; i++) {                               \
-     ColorStop currentColor = colors[i];                    \
-     bool isInBetween = currentColor.position <= factor;    \
-     index = int(mix(float(index), float(i), float(isInBetween))); \
-  }                                                         \
-  ColorStop currentColor = colors[index];                   \
-  ColorStop nextColor = colors[index + 1];                  \
-  float range = nextColor.position - currentColor.position; \
-  float lerpFactor = (factor - currentColor.position) / range; \
-  finalColor = mix(currentColor.color, nextColor.color, lerpFactor); \
-}
+const Component = ({
+  numBars = 7,
+  gradientFrom = "rgb(59, 15, 255)", // Deep blue
+  gradientTo = "rgba(124, 58, 237, 0.15)", // Purple with transparency
+  animationDuration = 2,
+  backgroundColor = "rgb(5, 5, 8)", // Dark background matching your theme
+  children,
+}) => {
+  return (
+    <section
+      className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden"
+      style={{ backgroundColor }}
+    >
+      <GradientBars
+        numBars={numBars}
+        gradientFrom={gradientFrom}
+        gradientTo={gradientTo}
+        animationDuration={animationDuration}
+      />
 
-void main() {
-  vec2 uv = gl_FragCoord.xy / uResolution;
-  
-  ColorStop colors[3];
-  colors[0] = ColorStop(uColorStops[0], 0.0);
-  colors[1] = ColorStop(uColorStops[1], 0.5);
-  colors[2] = ColorStop(uColorStops[2], 1.0);
-  
-  vec3 rampColor;
-  COLOR_RAMP(colors, uv.x, rampColor);
-  
-  // Create more dynamic flowing waves with time variance
-  float timeOffset = sin(uTime * 0.1) * 0.2;
-  
-  // Primary wave with enhanced sci-fi patterns
-  float primaryNoise = fbm(vec2(uv.x * 3.0 + uTime * 0.15, uTime * 0.2 + uv.y * 0.5)) * uAmplitude;
-  
-  // Secondary wave with higher frequency for tech details
-  float secondaryNoise = fbm(vec2(uv.x * 5.5 - uTime * 0.1, uTime * 0.15 + uv.y * 2.0)) * uAmplitude * 0.4;
-  
-  // Data-stream effect - horizontal data lines
-  float dataStream = fbm(vec2(uv.x * 20.0, uTime * 0.3)) * 0.15 * 
-                    smoothstep(0.4, 0.6, fbm(vec2(uv.y * 2.0, uTime * 0.05)));
-  
-  // Grid overlay for tech effect
-  float grid = gridPattern(uv + vec2(sin(uTime * 0.1), cos(uTime * 0.1)) * 0.1, 30.0, 0.15);
-  
-  // Energy pulse effects at random positions
-  float pulse1 = energyPulse(uv, vec2(0.3 + sin(uTime * 0.2) * 0.1, 0.7), 0.1, 0.02, uTime);
-  float pulse2 = energyPulse(uv, vec2(0.7 + cos(uTime * 0.15) * 0.1, 0.3), 0.15, 0.03, uTime * 0.8);
-  float pulses = pulse1 + pulse2;
-  
-  // Combine all wave patterns with enhanced pulsing
-  float pulseEffect = sin(uTime * 0.2) * 0.15 + 0.85;
-  float combinedNoise = (primaryNoise + secondaryNoise + dataStream) * pulseEffect;
-  
-  // Apply exponential function with more dramatic effect
-  float height = exp(combinedNoise * 0.9);
-  
-  // Calculate final intensity with more digital-looking transitions
-  float intensity = 0.9 * smoothstep(0.05, 1.3, (uv.y * 2.0 - height + 0.3));
-  
-  // More dynamic blend point with tech-inspired fluctuations
-  float midPoint = 0.25 + sin(uTime * 0.1) * 0.05 + cos(uTime * 0.2) * 0.03;
-  float blendFactor = uBlend * (1.0 + sin(uTime * 0.15) * 0.2);
-  float auroraAlpha = smoothstep(midPoint - blendFactor * 0.5, midPoint + blendFactor * 0.5, intensity);
-  
-  // Futuristic color shifting based on time
-  vec3 timeShift = vec3(
-    sin(uTime * 0.1) * 0.05,  // Less red shift
-    cos(uTime * 0.15) * 0.08, // Moderate green shift
-    sin(uTime * 0.2 + uv.x) * 0.15  // More blue shift for bluish tone
+      {children && (
+        <div className="relative z-10 w-full h-full flex items-center justify-center px-4">
+          {children}
+        </div>
+      )}
+    </section>
   );
-  
-  // Blue-dominant color enhancement
-  vec3 blueBoost = vec3(0.0, 0.05, 0.15); // Subtle blue bias
-  
-  // Enhanced color output with more vibrance and blue dominance
-  vec3 auroraColor = intensity * (rampColor + timeShift + blueBoost) * 1.3;
-  
-  // Add tech grid overlay
-  auroraColor += grid * vec3(0.1, 0.2, 0.5) * intensity;
-  
-  // Add energy pulse highlights with blue tint
-  auroraColor += pulses * vec3(0.0, 0.3, 0.8) * 2.0;
-  
-  // Add subtle edge glow with blue enhancement
-  float edgeGlow = pow(1.0 - abs(uv.y - 0.5) * 2.0, 3.0) * 0.4;
-  auroraColor += edgeGlow * (rampColor + vec3(0.0, 0.1, 0.3));
-  
-  // Add digital noise/static to certain areas for tech effect
-  float digitalNoise = step(0.97, fract(sin(dot(floor(uv * 100.0), vec2(12.9898, 78.233))) * 43758.5453));
-  auroraColor += digitalNoise * vec3(0.1, 0.3, 0.5) * intensity * 0.3;
-  
-  fragColor = vec4(auroraColor * auroraAlpha, auroraAlpha);
-}
-`;
+};
 
-export default function Aurora(props) {
-  const {
-    // More blue-dominant color scheme
-    colorStops = ["#0a2463", "#1e96fc", "#073b90"], // Deep blue, bright blue, royal blue
-    amplitude = 1.5,
-    blend = 0.7,
-  } = props;
-  const propsRef = useRef(props);
-  propsRef.current = props;
-
-  const ctnDom = useRef(null);
-
-  useEffect(() => {
-    const ctn = ctnDom.current;
-    if (!ctn) return;
-
-    const renderer = new Renderer({
-      alpha: true,
-      premultipliedAlpha: true,
-      antialias: true,
-    });
-    const gl = renderer.gl;
-    gl.clearColor(0, 0, 0, 0);
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-    gl.canvas.style.backgroundColor = "transparent";
-
-    let program;
-
-    function resize() {
-      if (!ctn) return;
-      const width = ctn.offsetWidth;
-      const height = ctn.offsetHeight;
-      renderer.setSize(width, height);
-      if (program) {
-        program.uniforms.uResolution.value = [width, height];
-      }
-    }
-    window.addEventListener("resize", resize);
-
-    const geometry = new Triangle(gl);
-    if (geometry.attributes.uv) {
-      delete geometry.attributes.uv;
-    }
-
-    const colorStopsArray = colorStops.map((hex) => {
-      const c = new Color(hex);
-      return [c.r, c.g, c.b];
-    });
-
-    program = new Program(gl, {
-      vertex: VERT,
-      fragment: FRAG,
-      uniforms: {
-        uTime: { value: 0 },
-        uAmplitude: { value: amplitude },
-        uColorStops: { value: colorStopsArray },
-        uResolution: { value: [ctn.offsetWidth, ctn.offsetHeight] },
-        uBlend: { value: blend },
-      },
-    });
-
-    const mesh = new Mesh(gl, { geometry, program });
-    ctn.appendChild(gl.canvas);
-
-    let animateId = 0;
-    const update = (t) => {
-      animateId = requestAnimationFrame(update);
-      const { time = t * 0.01, speed = 1.0 } = propsRef.current;
-      program.uniforms.uTime.value = time * speed * 0.18; // Slightly faster animation
-      program.uniforms.uAmplitude.value =
-        propsRef.current.amplitude ?? amplitude;
-      program.uniforms.uBlend.value = propsRef.current.blend ?? blend;
-      const stops = propsRef.current.colorStops ?? colorStops;
-      program.uniforms.uColorStops.value = stops.map((hex) => {
-        const c = new Color(hex);
-        return [c.r, c.g, c.b];
-      });
-      renderer.render({ scene: mesh });
-    };
-    animateId = requestAnimationFrame(update);
-
-    resize();
-
-    return () => {
-      cancelAnimationFrame(animateId);
-      window.removeEventListener("resize", resize);
-      if (ctn && gl.canvas.parentNode === ctn) {
-        ctn.removeChild(gl.canvas);
-      }
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
-    };
-  }, [amplitude, blend, colorStops]); // Added proper dependencies
-
-  return <div ref={ctnDom} className="w-full h-full" />;
-}
+export default Component;
+export { Component };

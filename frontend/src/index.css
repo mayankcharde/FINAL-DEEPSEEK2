@@ -13,7 +13,7 @@ body {
 }
 
 #root {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
 }
 
@@ -45,23 +45,19 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  border: none;
+  padding: 0;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: transparent;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-button:hover {
-  border-color: #646cff;
+  transition: none;
 }
 
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: none;
 }
 
 /* Custom Scrollbar Styles */
@@ -99,6 +95,19 @@ button:focus-visible {
   ::-webkit-scrollbar {
     width: 6px;
   }
+}
+
+/* Safe area support for notched phones */
+@supports (padding: max(0px)) {
+  .safe-bottom {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Prevent text size adjust on orientation change */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* Add these styles to your index.css or create a new CSS file and import it */

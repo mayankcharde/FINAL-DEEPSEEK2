@@ -38,10 +38,9 @@ try {
 // ---------- CORS Configuration ----------
 const allowedOrigins = [
   "http://localhost:5173",
-  // "http://localhost:8000",
-  // "http://localhost:3000",
-  process.env.FRONTEND_URL, // production frontend URL
-].filter(Boolean); // remove undefined
+  "https://final-deepseek-2.vercel.app",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
 
 app.use(
   cors({

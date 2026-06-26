@@ -563,10 +563,6 @@ const Register = () => {
   const navigate = useNavigate();
   const { login, user, loading } = useAuth();
 
-  if (!loading && user) return <Navigate to="/home" replace />;
-
-
-
   // Check if the form is focused
   useEffect(() => {
     const checkFocus = (e) => {
@@ -660,7 +656,7 @@ const Register = () => {
     try {
       const response = await axios.post("/api/auth/signup", userData);
       if (response.data.user) {
-        login(response.data.user);
+        login(response.data.user, response.data.token);
         navigate("/home", { replace: true });
       }
     } catch (err) {
@@ -681,6 +677,8 @@ const Register = () => {
   };
 
   const passwordStrength = getPasswordStrength();
+
+  if (!loading && user) return <Navigate to="/home" replace />;
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-6 py-16 relative overflow-hidden">

@@ -13,6 +13,11 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     axios.get("/api/auth/me")
       .then((res) => {
         if (res.data.user) {
@@ -23,19 +28,22 @@ export const AuthProvider = ({ children }) => {
       .catch(() => {
         setUser(null);
         localStorage.removeItem("userData");
+        localStorage.removeItem("authToken");
       })
       .finally(() => setLoading(false));
   }, []);
 
-  const login = useCallback((userData) => {
+  const login = useCallback((userData, token) => {
     setUser(userData);
     localStorage.setItem("userData", JSON.stringify(userData));
+    if (token) localStorage.setItem("authToken", token);
   }, []);
 
   const logout = useCallback(async () => {
     try { await axios.post("/api/auth/logout"); } catch {}
     setUser(null);
     localStorage.removeItem("userData");
+    localStorage.removeItem("authToken");
   }, []);
 
   return (

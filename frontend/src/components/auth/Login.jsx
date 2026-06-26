@@ -462,10 +462,6 @@ const Login = () => {
   const navigate = useNavigate();
   const { login, user, loading } = useAuth();
 
-  if (!loading && user) return <Navigate to="/home" replace />;
-
-
-
   // Check if the form is focused
   useEffect(() => {
     const checkFocus = (e) => {
@@ -492,7 +488,7 @@ const Login = () => {
     try {
       const response = await axios.post("/api/auth/login", credentials);
       if (response.data.user) {
-        login(response.data.user);
+        login(response.data.user, response.data.token);
         navigate("/home", { replace: true });
       }
     } catch (err) {
@@ -501,6 +497,8 @@ const Login = () => {
       setSubmitting(false);
     }
   };
+
+  if (!loading && user) return <Navigate to="/home" replace />;
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-6 py-16 relative overflow-hidden">

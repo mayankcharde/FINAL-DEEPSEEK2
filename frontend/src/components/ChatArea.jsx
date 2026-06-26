@@ -5,9 +5,9 @@ import { useTemplate } from "../context/TemplateContext";
 import { useAuth } from "../context/AuthContext";
 import { useLocation } from "react-router-dom";
 import UserMessage from "./text-response/UserMessage";
-import GeminiResponse from "./text-response/GeminiResponse";
+import MistralResponse from "./text-response/MistralResponse";
 import axios from "../utils/axios";
-import { generateGeminiResponse } from "./geminiTts";
+import { generateMistralResponse } from "./mistralTts";
 
 const ChatArea = () => {
   const { selectedTemplate } = useTemplate();
@@ -126,8 +126,7 @@ const ChatArea = () => {
     setIsLoading(true);
 
     try {
-      // Use Gemini TTS to generate response
-      const response = await generateGeminiResponse(message);
+      const response = await generateMistralResponse(message);
 
       const aiResponse = {
         id: Date.now() + 1,
@@ -194,7 +193,7 @@ const ChatArea = () => {
                 conv.type === "user" ? (
                   <UserMessage key={conv.id} message={conv.message} />
                 ) : (
-                  <GeminiResponse key={conv.id} response={conv.message} />
+                  <MistralResponse key={conv.id} response={conv.message} />
                 )
               )}
               {isLoading && (

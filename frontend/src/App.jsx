@@ -24,16 +24,6 @@ import Favorites from "./pages/Favorites";
 import SavedResponses from "./pages/SavedResponses";
 
 function AppRoutes() {
-  const { loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-black">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
   return (
     <Routes>
       <Route path="/" element={<Landing />} />

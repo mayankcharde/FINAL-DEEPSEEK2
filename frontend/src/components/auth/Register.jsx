@@ -547,26 +547,23 @@
 
 
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { User, Mail, Lock, Eye, EyeOff, CheckCircle, UserPlus, ArrowLeft } from "lucide-react";
+import { User, Eye, EyeOff, CheckCircle, UserPlus, ArrowLeft } from "lucide-react";
 import axios from "../../utils/axios";
 
 const Register = () => {
-  const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    profilePhoto: "",
-  });
+  const [userData, setUserData] = useState({ name: "", email: "", password: "", profilePhoto: "" });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formFocused, setFormFocused] = useState(false);
   const [currentField, setCurrentField] = useState(null);
   const formRef = useRef(null);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, user, loading } = useAuth();
+
+  if (!loading && user) return <Navigate to="/home" replace />;
 
 
 
@@ -657,12 +654,11 @@ const Register = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    setLoading(true);
+    setSubmitting(true);
     setError("");
 
     try {
       const response = await axios.post("/api/auth/signup", userData);
-
       if (response.data.user) {
         login(response.data.user);
         navigate("/home", { replace: true });
@@ -670,7 +666,7 @@ const Register = () => {
     } catch (err) {
       setError(err.response?.data?.message || "Failed to register");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -898,10 +894,10 @@ const Register = () => {
                 <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-fuchsia-600 to-blue-600 rounded-xl blur-xl opacity-70 group-hover:opacity-100 transition duration-500 animate-pulse-glow"></div>
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={submitting}
                   className="relative w-full py-4 rounded-xl font-semibold text-base transition-all duration-500 flex items-center justify-center gap-3 bg-gradient-to-r from-purple-600 via-purple-700 to-blue-600 hover:from-purple-500 hover:via-purple-600 hover:to-blue-500 text-white shadow-xl hover:shadow-purple-500/20 transform hover:-translate-y-1 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0"
                 >
-                  {loading ? (
+                  {submitting ? (
                     <span className="inline-flex items-center">
                       <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

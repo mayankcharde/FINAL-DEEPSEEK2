@@ -447,20 +447,22 @@
 
 
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { Mail, Lock, Eye, EyeOff, LogIn, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, LogIn, ArrowLeft } from "lucide-react";
 import axios from "../../utils/axios";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formFocused, setFormFocused] = useState(false);
   const formRef = useRef(null);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, user, loading } = useAuth();
+
+  if (!loading && user) return <Navigate to="/home" replace />;
 
 
 
@@ -484,12 +486,11 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
     setError("");
 
     try {
       const response = await axios.post("/api/auth/login", credentials);
-
       if (response.data.user) {
         login(response.data.user);
         navigate("/home", { replace: true });
@@ -497,7 +498,7 @@ const Login = () => {
     } catch (err) {
       setError(err.response?.data?.message || "Failed to login");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -644,10 +645,10 @@ const Login = () => {
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-cyan-600 to-indigo-600 rounded-2xl blur-xl opacity-70 group-hover:opacity-100 transition duration-500 animate-pulse-glow"></div>
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={submitting}
                   className="relative w-full py-4 rounded-2xl font-semibold text-base transition-all duration-500 flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-500 hover:via-blue-600 hover:to-indigo-600 text-white shadow-xl hover:shadow-blue-500/20 transform hover:-translate-y-1 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0"
                 >
-                  {loading ? (
+                  {submitting ? (
                     <span className="inline-flex items-center">
                       <svg
                         className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"

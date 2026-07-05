@@ -117,7 +117,13 @@ export const signUp = async (req, res) => {
     // Create user (password will be hashed by pre-save middleware)
     const user = await User.create({ name, email, password, profilePhoto });
 
-    const token = await genToken(user._id);
+    let token;
+    try {
+      token = await genToken(user._id);
+    } catch (tokenError) {
+      console.error("Token generation failed:", tokenError);
+      return res.status(500).json({ message: "Failed to generate authentication token" });
+    }
 
     const isProduction = process.env.NODE_ENV === "production";
     res.cookie("token", token, {
@@ -133,6 +139,7 @@ export const signUp = async (req, res) => {
 
     return res.status(201).json({ user: userResponse, token });
   } catch (error) {
+    console.error("Sign up error:", error);
     return res.status(500).json({ message: `Sign up error: ${error.message}` });
   }
 };
@@ -156,7 +163,13 @@ export const Login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = await genToken(user._id);
+    let token;
+    try {
+      token = await genToken(user._id);
+    } catch (tokenError) {
+      console.error("Token generation failed:", tokenError);
+      return res.status(500).json({ message: "Failed to generate authentication token" });
+    }
 
     const isProduction = process.env.NODE_ENV === "production";
     res.cookie("token", token, {
@@ -172,6 +185,7 @@ export const Login = async (req, res) => {
 
     return res.status(200).json({ user: userResponse, token });
   } catch (error) {
+    console.error("Login error:", error);
     return res.status(500).json({ message: `Login error: ${error.message}` });
   }
 };

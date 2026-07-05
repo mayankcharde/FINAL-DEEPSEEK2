@@ -50,9 +50,6 @@ app.use(
 
       if (allowedOrigins.indexOf(origin) === -1) {
         console.warn(`⚠️ Origin ${origin} not allowed by CORS`);
-        if (process.env.NODE_ENV === "development") {
-          return callback(null, true); // allow in development
-        }
         return callback(new Error("Not allowed by CORS"), false);
       }
       return callback(null, true);

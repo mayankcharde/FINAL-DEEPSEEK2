@@ -164,6 +164,8 @@ GEMINI_API_KEY=your_google_gemini_api_key
 RAZORPAY_KEY_ID=your_razorpay_key
 
 RAZORPAY_SECRET=your_razorpay_secret
+IMAGGA API=''
+IMAGGA SECRET=''
 ```
 
 Run the backend server:
